@@ -5,10 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:xml2json/xml2json.dart';
 
 part 'models/data.dart';
+
 part 'models/device_info.dart';
+
 part 'models/pid_data.dart';
+
 part 'models/rd_service.dart';
+
 part 'models/resp.dart';
+
 part 'models/skey.dart';
 
 class Msf100 {
@@ -16,8 +21,8 @@ class Msf100 {
 
   static const MethodChannel _channel = MethodChannel('msf100');
 
-  static Future<PidData?> capture() async {
-    final String? result = await _channel.invokeMethod('capture');
+  static Future<PidData?> capture({String? pidOptions}) async {
+    final String? result = await _channel.invokeMethod('capture', <String, dynamic>{'pid_options': pidOptions});
     if (result != null) {
       return _serilizePIDData(result);
     }
@@ -57,7 +62,6 @@ class Msf100 {
 //   <Interface id="CAPTURE" path="in.gov.uidai.rdservice.fp.CAPTURE"/>
 //   <Interface id="DEVICEINFO" path="in.gov.uidai.rdservice.fp.INFO"/>
 // </RDService>
-
 
 //PID Data
 

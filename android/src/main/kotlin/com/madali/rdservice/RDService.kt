@@ -24,12 +24,12 @@ class RDService {
         }
     }
 
-    fun capture(activity: Activity, onError: (ResultError) -> Unit) {
+    fun capture(activity: Activity, pidOptions: String? = null, onError: (ResultError) -> Unit) {
 
         try {
             val intent = Intent()
             intent.action = "in.gov.uidai.rdservice.fp.CAPTURE"
-            intent.putExtra("PID_OPTIONS", getPidOption())
+            intent.putExtra("PID_OPTIONS", if (pidOptions.isNullOrEmpty()) getPidOption() else pidOptions)
             activity.startActivityForResult(intent, REQUESTCODE_CAPTURE)
         } catch (e: Exception) {
             onError(Utils.parseError(e.message))
@@ -37,13 +37,13 @@ class RDService {
         }
     }
 
-/*  private fun isRDServiceAvailable(activity: Activity): Boolean {
-        val intent = Intent("in.gov.uidai.rdservice.fp.INFO")
-        val resolveInfoList: List<ResolveInfo> =
-            activity.packageManager.queryIntentActivities(intent, 0)
-        if (resolveInfoList.isNotEmpty()) return true;
-        return false;
-    }*/
+    /*  private fun isRDServiceAvailable(activity: Activity): Boolean {
+            val intent = Intent("in.gov.uidai.rdservice.fp.INFO")
+            val resolveInfoList: List<ResolveInfo> =
+                activity.packageManager.queryIntentActivities(intent, 0)
+            if (resolveInfoList.isNotEmpty()) return true;
+            return false;
+        }*/
 
     private fun getPidOption(): String {
         return """<PidOptions ver="1.0"><Opts fCount="1" fType="0" iCount="0" iType="0" pCount="0" pType="0" format="0" pidVer="2.0" timeout="10000"/></PidOptions>"""

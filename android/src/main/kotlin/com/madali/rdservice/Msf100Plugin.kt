@@ -39,9 +39,15 @@ class Msf100Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             "deviceInfo" -> {
                 rdService.deviceInfo(this.binding!!.activity, onError = ::handleError)
             }
+
             "capture" -> {
-                rdService.capture(this.binding!!.activity, onError = ::handleError)
+                rdService.capture(
+                    this.binding!!.activity,
+                    call.argument<String>("pid_options"),
+                    onError = ::handleError
+                )
             }
+
             else -> {
                 result.notImplemented()
             }
@@ -69,6 +75,7 @@ class Msf100Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 result = null
                 return true
             }
+
             2 -> if (resultCode == RESULT_OK && requestCode == RDService.REQUESTCODE_CAPTURE) {
                 if (data == null) {
                     result!!.error("", "No data from device", "")
@@ -83,6 +90,7 @@ class Msf100Plugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 result = null
                 return true
             }
+
             else -> return false
         }
         result?.error("", "Unknown error", "")
